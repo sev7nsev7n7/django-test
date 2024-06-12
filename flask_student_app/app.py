@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///students.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
@@ -11,6 +11,8 @@ class Student(db.Model):
     name = db.Column(db.String(100), nullable=False)
     age = db.Column(db.Integer, nullable=False)
     grade = db.Column(db.String(10), nullable=False)
+    grade = db.Column(db.String(10), nullable=False)
+    phone = db.Column(db.Integer, nullable=False)
 
 @app.route('/')
 def index():
@@ -22,8 +24,9 @@ def add_student():
     name = request.form['name']
     age = request.form['age']
     grade = request.form['grade']
-
-    new_student = Student(name=name, age=age, grade=grade)
+    email = request.form['email']
+    phone = request.form['phone']
+    new_student = Student(name=name, age=age, grade=grade, email=email, phone=phone)
     db.session.add(new_student)
     db.session.commit()
 
